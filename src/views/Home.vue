@@ -1,20 +1,19 @@
 <script setup>
-/* composants existants du kit */
-import DefaultInfoCard    from '@/components/DefaultInfoCard.vue'
-import MaterialButton     from '@/components/MaterialButton.vue'
+/* composants du kit ------------------------------------------------- */
+import DefaultInfoCard   from '@/components/DefaultInfoCard.vue'
+import MaterialButton    from '@/components/MaterialButton.vue'
+import LogoCarousel      from '@/components/LogoCarousel.vue'
+import SplitImageSection from '@/components/SplitImageSection.vue'
 
-/* deux mini-composants utilitaires */
-import LogoCarousel       from '@/components/LogoCarousel.vue'     
-import SplitImageSection  from '@/components/SplitImageSection.vue'
-
-/* assets */
-import hero         from '@/assets/hero.png'
-import visionImg    from '@/assets/home/vision.jpg'
-import knowhowImg   from '@/assets/home/knowhow.jpg'
+/* assets ------------------------------------------------------------ */
+import hero      from '@/assets/hero.png'
+import vision    from '@/assets/home/vision.png'
+import knowhow   from '@/assets/home/knowhow.png'
+import palomaImg from '@/assets/home/paloma.png'
 </script>
 
 <template>
-  <!-- HERO --------------------------------------------------------------------- -->
+  <!-- HERO ---------------------------------------------------------- -->
   <header class="page-header min-vh-85 d-flex align-items-center"
           :style="{ backgroundImage: `url(${hero})` }">
     <div class="container text-center">
@@ -22,7 +21,7 @@ import knowhowImg   from '@/assets/home/knowhow.jpg'
         A&C Process<br class="d-none d-lg-block" />Our efficiency to serve yours
       </h1>
       <p class="lead text-white opacity-9 mb-4">
-        Ingénierie &amp; équipements process depuis 1995
+        Ingénierie&nbsp;&amp;&nbsp;équipements process depuis&nbsp;1995
       </p>
       <MaterialButton color="primary" size="lg" to="/contact">
         Contactez-nous
@@ -35,17 +34,17 @@ import knowhowImg   from '@/assets/home/knowhow.jpg'
     </svg>
   </header>
 
-  <!-- VALEURS CLÉS ------------------------------------------------------------- -->
+  <!-- VALEURS CLÉS --------------------------------------------------- -->
   <section class="py-8">
     <div class="container">
       <div class="row g-4">
         <DefaultInfoCard class="col-md-4"
-          icon="ni ni-arrows-2-minimal text-primary"
+          icon="ni ni-ruler-pencil text-primary"
           title="Flexibilité"
           description="Solutions sur-mesure et réactivité pour chaque ligne de production." />
 
         <DefaultInfoCard class="col-md-4"
-          icon="ni ni-shield-check text-primary"
+          icon="ni ni-check-bold text-primary"
           title="Éthique"
           description="Transparence, sécurité, respect strict des normes." />
 
@@ -57,19 +56,48 @@ import knowhowImg   from '@/assets/home/knowhow.jpg'
     </div>
   </section>
 
-  <!-- À PROPOS / NOTRE VISION --------------------------------------------------- -->
-  <SplitImageSection :img="visionImg" img-first>
+  <!-- NOTRE VISION --------------------------------------------------- -->
+  <SplitImageSection :img="vision" img-first alt="Four industriel en coupe">
     <template #title>Notre vision</template>
     <template #text>
-      Appliquée dans chacune des actions que nous réalisons, notre vision est
-      de considérer les aspects réfractaires comme un&nbsp;élément d’un ensemble
-      global.<br /><br />
-      <strong>Objectif :</strong> optimiser vos performances, vos coûts
-      énergétiques et la durabilité de vos installations.
+      Considérer le réfractaire comme un maillon d’un&nbsp;ensemble global pour
+      optimiser vos performances, vos&nbsp;coûts&nbsp;énergétiques et la
+      durabilité de vos installations.
     </template>
   </SplitImageSection>
 
-  <!-- CAROUSEL CLIENTS --------------------------------------------------------- -->
+  <!-- SAVOIR-FAIRE --------------------------------------------------- -->
+  <SplitImageSection :img="knowhow">
+    <template #title>Notre savoir-faire</template>
+    <template #text>
+      <ul class="list-unstyled mb-0">
+        <li>&mdash;&nbsp;Génie des procédés et science des matériaux à&nbsp;haut-T.</li>
+        <li>&mdash;&nbsp;Modélisation thermo-mécanique &amp; simulation numérique.</li>
+        <li>&mdash;&nbsp;Mesures in-situ, défectologie et métrologie de campagne.</li>
+      </ul>
+    </template>
+  </SplitImageSection>
+
+  <!-- PROJET PALOMA -------------------------------------------------- -->
+  <SplitImageSection :img="palomaImg" img-first alt="Interface du projet PALOMA">
+    <template #title>Projet&nbsp;PALOMA</template>
+    <template #text>
+      PALOMA virtualise notre expertise matériaux&nbsp;/ process pour offrir<br />
+      <strong>une plateforme d’assistance intelligente</strong> :
+      <ul class="mt-3">
+        <li>&bull;&nbsp;Optimisation énergétique et de durabilité des fours&nbsp;HT.</li>
+        <li>&bull;&nbsp;Recommandations personnalisées grâce à&nbsp;l’IA.</li>
+        <li>&bull;&nbsp;Tableaux de bord temps-réel &amp;&nbsp;simulation intégrée.</li>
+      </ul>
+      <p class="mb-0">
+        Porté par une équipe dédiée (2&nbsp;alternants ingénieurs Informatique du CESI Nancy + nos experts),
+        PALOMA incarne notre ambition : <em>réduire l’empreinte carbone des
+        industries à haute température</em>.
+      </p>
+    </template>
+  </SplitImageSection>
+
+  <!-- CAROUSEL CLIENTS ---------------------------------------------- -->
   <section class="py-8 bg-light">
     <div class="container">
       <h2 class="text-center mb-5">Ils nous font confiance</h2>
@@ -77,24 +105,11 @@ import knowhowImg   from '@/assets/home/knowhow.jpg'
     </div>
   </section>
 
-  <!-- SAVOIR-FAIRE ------------------------------------------------------------- -->
-  <SplitImageSection :img="knowhowImg">
-    <template #title>Notre savoir-faire</template>
-    <template #text>
-      Nos expériences croisées dans l’énergie et les matériaux nous permettent
-      de répondre à&nbsp;vos besoins :<br /><br />
-      &mdash; <strong>Génie des procédés</strong>, science des matériaux et tenue
-      en&nbsp;service.<br />
-      &mdash; Méthodes avancées de <strong>défectologie</strong>, mesures sur
-      site et simulation numérique.<br />
-    </template>
-  </SplitImageSection>
-
-  <!-- CTA FINAL ---------------------------------------------------------------- -->
+  <!-- CTA FINAL ------------------------------------------------------ -->
   <section class="py-8 bg-gradient-primary text-white text-center">
     <div class="container">
-      <h2 class="mb-4 fw-bold">Vous avez un projet ?</h2>
-      <p class="lead opacity-9 mb-5">Parlons-en dès aujourd’hui !</p>
+      <h2 class="mb-4 fw-bold">Vous avez un projet&nbsp;?</h2>
+      <p class="lead opacity-9 mb-5">Parlons-en dès aujourd’hui&nbsp;!</p>
       <MaterialButton color="light" size="lg" to="/contact">
         Demander un devis
       </MaterialButton>
@@ -103,6 +118,17 @@ import knowhowImg   from '@/assets/home/knowhow.jpg'
 </template>
 
 <style scoped>
-.page-header {background-size:cover;background-position:center;position:relative;}
-.wave        {position:absolute;width:100%;height:80px;fill:#fff;}
+.page-header {
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  fill: #fff;
+}
 </style>

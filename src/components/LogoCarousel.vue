@@ -1,40 +1,55 @@
 <script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Navigation, Pagination, Autoplay } from 'swiper/modules'
+
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
-const names = [
-  'arkema.jpg',  'ascometal.png', 'cerfav.png',   'holimaker.png',
-  'hydro.png',   'lafarge.svg',   'recytech.jpg', 'riotinto.png',
-  'seqens.png',  'solvay.png',    'suez.png'
-]
-
-const logos = names.map(
-  file => new URL(`../assets/logos/${file}`, import.meta.url).href
-)
+const logoModules = import.meta.glob('@/assets/logos/*.{png,jpg,jpeg,svg}', {
+  eager: true,
+  import: 'default'
+})
+const logos = Object.values(logoModules)
 </script>
 
 <template>
-  <Swiper
-    :slides-per-view="5"
-    :loop="true"
-    :autoplay="{ delay: 3000 }"
-    navigation
-    pagination
-    :breakpoints="{
-      0:   { slidesPerView: 2 },
-      576: { slidesPerView: 3 },
-      992: { slidesPerView: 5 }
-    }"
-    class="shadow rounded-4 p-4 bg-white"
-  >
-    <SwiperSlide
-      v-for="src in logos"
-      :key="src"
-      class="d-flex align-items-center justify-content-center"
+  <div class="logo-swiper p-4 rounded-4 bg-white shadow">
+    <Swiper
+      :modules="[Navigation, Pagination, Autoplay]"
+      :slides-per-view="5"
+      :space-between="40"
+      :loop="true"
+      :autoplay="{ delay: 3000, disableOnInteraction: false }"
+      navigation
+      pagination
+      :breakpoints="{
+        0: { slidesPerView: 2, spaceBetween: 20 },
+        576: { slidesPerView: 3, spaceBetween: 30 },
+        992: { slidesPerView: 5, spaceBetween: 40 }
+      }"
     >
-      <img :src="src" alt="" style="max-width:160px;max-height:80px" />
-    </SwiperSlide>
-  </Swiper>
+      <SwiperSlide
+        v-for="src in logos"
+        :key="src"
+        class="d-flex align-items-center justify-content-center"
+      >
+        <img :src="src" class="img-fluid" style="max-height:80px; max-width:160px" />
+      </SwiperSlide>
+    </Swiper>
+  </div>
 </template>
+
+<style scoped>
+.logo-swiper :deep(.swiper-button-next),
+.logo-swiper :deep(.swiper-button-prev) {
+  color: var(--bs-primary);
+  width: 32px;
+  height: 32px;
+  z-index: 10;
+}
+
+.logo-swiper :deep(.swiper-pagination-bullet-active) {
+  background: var(--bs-primary);
+}
+</style>
