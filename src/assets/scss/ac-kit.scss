@@ -1,0 +1,9 @@
+@import "@/assets/scss/_ac-theme";  /* tes variables couleurs */
+
+/* kit complet */
+@import "./material-kit.scss";
+
+/* overrides CSS : ici on met le dégradé réel */
+.bg-gradient-primary {
+  background-image: linear-gradient(195deg,#0097d7 0%,#005d9c 100%) !important;
+}
