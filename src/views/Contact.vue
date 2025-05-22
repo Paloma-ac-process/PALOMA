@@ -26,7 +26,7 @@
                 <MaterialInput id="email" type="email" label="Email" />
               </div>
               <div class="col-12">
-                <MaterialTextArea id="message" label="Message" rows="4" />
+                <MaterialTextArea id="message" label="Message" rows=4 />
               </div>
               <div class="col-12 text-end">
                 <MaterialButton color="primary" type="submit">Envoyer</MaterialButton>

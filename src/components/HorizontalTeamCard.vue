@@ -1,30 +1,20 @@
 <template>
-    <div class="card card-profile overflow-hidden shadow-lg">
-      <div class="row g-0">
-        <!-- photo -->
-        <div class="col-5">
-          <img :src="img" class="w-100 h-100 object-fit-cover" />
+    <div class="card horizontal-team-card h-100 border-0 shadow-sm">
+      <!-- Image à gauche -->
+      <div class="row g-0 h-100 align-items-center">
+        <div class="col-auto">
+          <img
+            :src="img"
+            :alt="name"
+            class="team-img rounded-start"
+          />
         </div>
-  
-        <!-- texte -->
-        <div
-          class="col-7 d-flex flex-column justify-content-center text-start p-4"
-        >
+        <div class="col p-4 d-flex flex-column justify-content-center">
           <h5 class="mb-1">{{ name }}</h5>
-          <p class="text-muted mb-2 text-xs fw-semibold">{{ position }}</p>
-  
-          <!-- réseaux sociaux optionnels -->
-          <div v-if="socials?.length" class="mt-2">
-            <a
-              v-for="s in socials"
-              :key="s.icon"
-              :href="s.url"
-              target="_blank"
-              rel="noopener"
-              class="btn btn-icon-only btn-sm btn-link text-primary me-1"
-            >
-              <i :class="s.icon"></i>
-            </a>
+          <p class="text-muted mb-3">{{ position }}</p>
+          <!-- slot actions (icônes mail / linkedin) -->
+          <div class="mt-auto">
+            <slot name="actions" />
           </div>
         </div>
       </div>
@@ -32,22 +22,24 @@
   </template>
   
   <script setup>
-  /* Props identiques à celles du kit */
-  defineProps({
-    img: { type: String, required: true },
-    name: { type: String, required: true },
-    position: { type: String, required: true },
-    socials: {
-      type: Array,
-      default: () => [
-        /* { icon: 'fab fa-linkedin', url: '#' } */
-      ],
-    },
+  const props = defineProps({
+    img:      { type: String, required: true },
+    name:     { type: String, required: true },
+    position: { type: String, required: true }
   })
   </script>
   
   <style scoped>
-  .card-profile {
+  .horizontal-team-card {
     border-radius: 1rem;
+    overflow: hidden;
   }
-  </style>  
+  
+  .team-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+  }
+  </style>
+  
