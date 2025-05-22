@@ -1,6 +1,4 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import logo from '@/assets/logo.png' 
 
 const links = [
@@ -10,7 +8,6 @@ const links = [
   { to: '/competences', label: 'Compétences' },
   { to: '/services',    label: 'Services' },
   { to: '/contact',     label: 'Contact' },
-  { to: '/paloma-apps', label: 'Applications PALOMA' }
 ]
 </script>
 

@@ -1,53 +1,46 @@
+<!-- RotatingCard.vue -->
 <template>
-    <div class="rotating-card position-relative w-100 h-100"
-         @mouseenter="hover = true"
-         @mouseleave="hover = false"
-         @click="hover = !hover">
-      <div class="rotating-card-inner w-100 h-100" :class="{ flipped: hover }">
-        <div class="rotating-card-face front">
+    <div class="rotating-card">
+      <div class="rotating-card-inner">
+        <div class="rotating-card-front">
           <slot name="front" />
         </div>
-        <div class="rotating-card-face back">
+        <div class="rotating-card-back">
           <slot name="back" />
         </div>
       </div>
     </div>
   </template>
   
-  <script setup>
-  import { ref } from 'vue'
-  const hover = ref(false)
+  <script setup lang="ts">
   </script>
   
   <style scoped>
   .rotating-card {
-    perspective: 1200px;
+    perspective: 1000px;
+    width: 100%;
   }
   .rotating-card-inner {
-    transition: transform 0.7s;
-    transform-style: preserve-3d;
     position: relative;
     width: 100%;
     height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
   }
-  .rotating-card-inner.flipped {
+  .rotating-card:hover .rotating-card-inner {
     transform: rotateY(180deg);
   }
-  .rotating-card-face {
+  .rotating-card-front,
+  .rotating-card-back {
     position: absolute;
     width: 100%;
-    height: 100%;
     backface-visibility: hidden;
-    border-radius: 1rem;
   }
-  .rotating-card-face.front {
-    background: #fff;
-    box-shadow: var(--bs-box-shadow);
+  .rotating-card-front {
+    z-index: 2;
   }
-  .rotating-card-face.back {
-    background: #fff;
+  .rotating-card-back {
     transform: rotateY(180deg);
-    box-shadow: var(--bs-box-shadow-lg);
   }
   </style>
   

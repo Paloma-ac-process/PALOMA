@@ -47,12 +47,18 @@
         <hr class="border-white opacity-3 mt-5" />
   
         <div class="row">
-          <div class="col-12 text-center">
-            <p class="text-sm mb-0 opacity-8">
-              © {{ year }} — A&C&nbsp;Process. Tous droits réservés.
-            </p>
-          </div>
-        </div>
+            <div class="col-12 text-center">
+                <p class="text-sm mb-0 opacity-8">
+                © {{ year }} — A&C&nbsp;Process. Tous droits réservés.
+                </p>
+                <router-link
+                to="/mentions-legales"
+                class="text-sm mt-2 d-block text-white opacity-8 text-decoration-underline"
+                >
+                Mentions légales
+                </router-link>
+            </div>
+            </div>
       </div>
     </footer>
   </template>
