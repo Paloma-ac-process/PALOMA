@@ -40,6 +40,7 @@ export default class AuthController {
           id: user.id,
           email: user.email,
           fullName: user.fullName,
+          role: user.role,
           createdAt: user.createdAt
         }
       })
@@ -72,6 +73,7 @@ export default class AuthController {
           id: user.id,
           email: user.email,
           fullName: user.fullName,
+          role: user.role,
           createdAt: user.createdAt
         }
       })
@@ -113,6 +115,7 @@ export default class AuthController {
           id: user.id,
           email: user.email,
           fullName: user.fullName,
+          role: user.role,
           createdAt: user.createdAt
         }
       })
@@ -130,5 +133,36 @@ export default class AuthController {
   async dashboard({ auth, view }: HttpContext) {
     const user = auth.user!
     return view.render('dashboard', { user })
+  }
+
+  /**
+   * Mettre à jour les informations de l'utilisateur connecté (API)
+   */
+  async updateMe({ auth, request, response }: HttpContext) {
+    try {
+      const user = auth.user!
+      const { fullName, email, password } = request.only(['fullName', 'email', 'password'])
+      if (fullName) user.fullName = fullName
+      if (email) user.email = email
+      if (password) user.password = password
+      await user.save()
+      return response.json({
+        success: true,
+        message: 'Informations utilisateur mises à jour',
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          role: user.role,
+          createdAt: user.createdAt
+        }
+      })
+    } catch (error) {
+      return response.status(400).json({
+        success: false,
+        message: 'Erreur lors de la mise à jour',
+        error: error.message
+      })
+    }
   }
 } 

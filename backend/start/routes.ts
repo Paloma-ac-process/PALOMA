@@ -18,7 +18,11 @@ router.get('/', async () => {
 })
 
 // Routes d'authentification API
-router.post('/register', '#controllers/auth_controller.register')
-router.post('/login', '#controllers/auth_controller.login')
-router.post('/logout', '#controllers/auth_controller.logout').use(middleware.auth())
-router.get('/me', '#controllers/auth_controller.me').use(middleware.auth())
+router.group(() => {
+  router.post('/register', '#controllers/auth_controller.register')
+  router.post('/login', '#controllers/auth_controller.login')
+  router.post('/logout', '#controllers/auth_controller.logout').use(middleware.auth())
+  router.get('/me', '#controllers/auth_controller.me').use(middleware.auth())
+  router.put('/me', '#controllers/auth_controller.updateMe').use(middleware.auth())
+  // ... autres routes API si besoin
+}).prefix('/api')
