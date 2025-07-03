@@ -1,3 +1,7 @@
+<script setup>
+import contactHero from '@/assets/home/contact-hero.png'
+</script>
+
 <template>
     <!-- HERO -->
     <header class="page-header section-height-60 bg-gradient-dark position-relative overflow-hidden">
@@ -7,7 +11,7 @@
       <div class="container text-center text-white d-flex flex-column align-items-center justify-content-center h-100 position-relative">
         <div class="hero-image-wrapper mb-4">
           <img
-            src="@/assets/home/contact-hero.png"
+            :src="contactHero"
             alt="Contact"
             class="img-fluid rounded"
             loading="lazy"

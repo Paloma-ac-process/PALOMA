@@ -8,7 +8,7 @@
         <!-- Image Hero -->
         <div class="hero-image-wrapper mb-4">
           <img
-            src="@/assets/home/competence-hero.png"
+            :src="competenceHero"
             alt="Domaines de compétence"
             class="img-fluid rounded"
             loading="lazy"
@@ -44,6 +44,7 @@
   </template>
   
   <script setup>
+  import competenceHero from '@/assets/home/competence-hero.png'
   const tabs = [
     {
       icon: 'ni ni-settings-gear-65 text-primary',
@@ -55,13 +56,13 @@
       icon: 'ni ni-planet text-primary',
       title: 'Fabrication de matériaux',
       content:
-        'Procédés haute température pour la fonte, l’aluminium, les céramiques et verres : performance des réfractaires.'
+        "Procédés haute température pour la fonte, l'aluminium, les céramiques et verres : performance des réfractaires."
     },
     {
       icon: 'ni ni-atom text-primary',
       title: 'Industrie chimique',
       content:
-        'Résistance corrosive, tenue thermique et maintien des rendements pour équipements de l’industrie chimique.'
+        "Résistance corrosive, tenue thermique et maintien des rendements pour équipements de l'industrie chimique."
     }
   ]
   </script>

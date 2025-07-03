@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink } from "vue-router"
+import logo from '@/assets/logo.svg'
 
 const links = [
   { to: "/",            label: "Accueil" },
@@ -16,7 +17,7 @@ const links = [
     <div class="container">
       <!-- logo -->
       <RouterLink to="/" class="navbar-brand d-flex align-items-center">
-        <img src="@/assets/logo.svg" alt="A&C Process" height="34" />
+        <img :src="logo" alt="A&C Process" height="34" />
       </RouterLink>
 
       <!-- burger -->

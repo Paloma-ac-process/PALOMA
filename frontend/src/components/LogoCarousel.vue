@@ -6,11 +6,40 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
-const logoModules = import.meta.glob('@/assets/logos/*.{png,jpg,jpeg,svg}', {
-  eager: true,
-  import: 'default'
-})
-const logos = Object.values(logoModules)
+// Logos principaux
+import arkema from '../assets/logos/arkema.jpg'
+import ascometal from '../assets/logos/ascometal.png'
+import cerfav from '../assets/logos/cerfav.png'
+import holimaker from '../assets/logos/holimaker.png'
+import hydro from '../assets/logos/hydro.png'
+import lafarge from '../assets/logos/lafarge.svg'
+import recytech from '../assets/logos/recytech.jpg'
+import riotinto from '../assets/logos/riotinto.png'
+import seqens from '../assets/logos/seqens.png'
+import solvay from '../assets/logos/solvay.png'
+import suez from '../assets/logos/suez.png'
+
+// Testimonials
+import hydroTest from '../assets/testimonials/hydro.png'
+import junger from '../assets/testimonials/junger.jpg'
+import riotintoTest from '../assets/testimonials/riotinto.png'
+
+// Vision
+import img1 from '../assets/vision/img1.png'
+import img2 from '../assets/vision/img2.png'
+import img3 from '../assets/vision/img3.png'
+import img4 from '../assets/vision/img4.png'
+import img5 from '../assets/vision/img5.png'
+import img6 from '../assets/vision/img6.png'
+import img7 from '../assets/vision/img7.png'
+
+const logos = [
+  arkema, ascometal, cerfav, holimaker, hydro, lafarge, recytech, riotinto, seqens, solvay, suez,
+  hydroTest, junger, riotintoTest,
+  img1, img2, img3, img4, img5, img6, img7
+]
+
+console.log('Logos chargés dans le carrousel :', logos)
 </script>
 
 <template>

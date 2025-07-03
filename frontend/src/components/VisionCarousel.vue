@@ -2,7 +2,7 @@
     <div class="vision-section container d-flex flex-column flex-lg-row align-items-center py-8 gap-5">
       <!-- Carrousel -->
       <div class="vision-carousel w-100 w-lg-50">
-        <swiper
+        <Swiper
           :modules="[Autoplay, EffectCoverflow, Navigation]"
           effect="coverflow"
           :grabCursor="true"
@@ -20,10 +20,10 @@
           :autoplay="{ delay: 3000 }"
           class="swiper-vision"
         >
-          <swiper-slide v-for="(img, i) in images" :key="i">
+          <SwiperSlide v-for="(img, i) in images" :key="i">
             <img :src="img" class="vision-img" />
-          </swiper-slide>
-        </swiper>
+          </SwiperSlide>
+        </Swiper>
       </div>
     </div>
   </template>
@@ -35,15 +35,15 @@
   import 'swiper/css/effect-coverflow'
   import 'swiper/css/navigation'
   
-  const images = [
-    new URL('@/assets/vision/img1.png', import.meta.url).href,
-    new URL('@/assets/vision/img2.png', import.meta.url).href,
-    new URL('@/assets/vision/img3.png', import.meta.url).href,
-    new URL('@/assets/vision/img4.png', import.meta.url).href,
-    new URL('@/assets/vision/img5.png', import.meta.url).href,
-    new URL('@/assets/vision/img6.png', import.meta.url).href,
-    new URL('@/assets/vision/img7.png', import.meta.url).href
-  ]
+  import img1 from '../assets/vision/img1.png'
+  import img2 from '../assets/vision/img2.png'
+  import img3 from '../assets/vision/img3.png'
+  import img4 from '../assets/vision/img4.png'
+  import img5 from '../assets/vision/img5.png'
+  import img6 from '../assets/vision/img6.png'
+  import img7 from '../assets/vision/img7.png'
+  
+  const images = [img1, img2, img3, img4, img5, img6, img7]
   </script>
   
   <style scoped>

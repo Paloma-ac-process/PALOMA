@@ -8,7 +8,7 @@
         <!-- Image Hero -->
         <div class="hero-image-wrapper mb-4">
           <img
-            src="@/assets/home/equipment-hero.png"
+            :src="equipmentHero"
             alt="Nos équipements"
             class="img-fluid rounded"
             loading="lazy"
@@ -55,12 +55,13 @@
   
   <script setup>
   import DefaultInfoCard from '@/components/DefaultInfoCard.vue'
+  import equipmentHero from '@/assets/home/equipment-hero.png'
   
   const eqs = [
     {
       icon: 'ni ni-sound-wave text-primary',
-      title: 'Centrale d’acquisition & thermocouples',
-      desc: 'Lecture / enregistrement en contact ou insertion dans l’épaisseur des matériaux.'
+      title: "Centrale d'acquisition & thermocouples",
+      desc: "Lecture / enregistrement en contact ou insertion dans l'épaisseur des matériaux."
     },
     {
       icon: 'ni ni-camera-compact text-primary',

@@ -8,7 +8,7 @@
         <!-- Image Hero -->
         <div class="hero-image-wrapper mb-4">
           <img
-            src="@/assets/home/services-hero.png"
+            :src="servicesHero"
             alt="Nos services"
             class="img-fluid rounded"
             loading="lazy"
@@ -44,6 +44,8 @@
   </template>
   
   <script setup lang="ts">
+  import servicesHero from '@/assets/home/services-hero.png'
+  
   type Service = {
     icon: string
     title: string
@@ -64,7 +66,7 @@
     {
       icon: 'ni ni-briefcase-24 text-primary',
       title: 'Gestion de projet & Assistance technique',
-      description: 'De l’appel d’offre au suivi de mise en œuvre.'
+      description: "De l'appel d'offre au suivi de mise en œuvre."
     }
   ]
   </script>
