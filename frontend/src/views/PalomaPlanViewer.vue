@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Header -->
-    <PalomaHeader />
+    <!-- <PalomaHeader /> -->
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -261,7 +261,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import PalomaHeader from '@/components/PalomaHeader.vue'
 import apiService from '@/services/api.js'
 
 const route = useRoute()

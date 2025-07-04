@@ -1,329 +1,198 @@
-const API_BASE_URL = 'http://localhost:3333/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3333/api'
 
-class ApiService {
-  constructor() {
-    this.baseURL = API_BASE_URL
-  }
+function getToken() {
+  return localStorage.getItem('paloma_token')
+}
 
-  getHeaders() {
-    const token = localStorage.getItem('paloma_token')
-    return {
-      'Content-Type': 'application/json',
-      ...(token && { 'Authorization': `Bearer ${token}` })
-    }
-  }
+async function handleResponse(res) {
+  if (!res.ok) throw new Error(await res.text() || 'Erreur API')
+  return await res.json()
+}
 
-  async request(endpoint, options = {}) {
-    const url = `${this.baseURL}${endpoint}`
-    const config = {
-      headers: this.getHeaders(),
-      ...options
-    }
-
-    try {
-      const response = await fetch(url, config)
-      
-      if (!response.ok) {
-        if (response.status === 401) {
-          // Token expiré, rediriger vers la connexion
-          localStorage.removeItem('paloma_token')
-          localStorage.removeItem('paloma_user')
-          window.location.href = '/paloma/login'
-          return
-        }
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      return await response.json()
-    } catch (error) {
-      console.error('API request failed:', error)
-      throw error
-    }
-  }
-
-  // Authentification
-  async login(credentials) {
-    return this.request('/auth/login', {
+export default {
+  // Utilisateurs
+  async getUsers() {
+    const res = await fetch(`${API_BASE_URL}/api/users`, {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    return handleResponse(res)
+  },
+  async updateUserRole(id, role) {
+    const res = await fetch(`${API_BASE_URL}/api/users/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify({ role })
+    })
+    return handleResponse(res)
+  },
+  async deleteUser(id) {
+    const res = await fetch(`${API_BASE_URL}/api/users/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    return handleResponse(res)
+  },
+  async createUser(data) {
+    const res = await fetch(`${API_BASE_URL}/api/users`, {
       method: 'POST',
-      body: JSON.stringify(credentials)
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
     })
-  }
-
-  async logout() {
-    return this.request('/auth/logout', {
-      method: 'POST'
-    })
-  }
-
-  // Dashboard
-  async getDashboardData() {
-    return this.request('/dashboard')
-  }
+    return handleResponse(res)
+  },
 
   // Clients
   async getClients() {
-    return this.request('/clients')
-  }
-
-  async getClient(id) {
-    return this.request(`/clients/${id}`)
-  }
-
-  async createClient(clientData) {
-    return this.request('/clients', {
-      method: 'POST',
-      body: JSON.stringify(clientData)
+    const res = await fetch(`${API_BASE_URL}/api/clients`, {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
     })
-  }
-
-  async updateClient(id, clientData) {
-    return this.request(`/clients/${id}`, {
+    return handleResponse(res)
+  },
+  async updateClient(id, data) {
+    const res = await fetch(`${API_BASE_URL}/api/clients/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(clientData)
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
     })
-  }
-
+    return handleResponse(res)
+  },
   async deleteClient(id) {
-    return this.request(`/clients/${id}`, {
-      method: 'DELETE'
+    const res = await fetch(`${API_BASE_URL}/api/clients/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
     })
-  }
+    return handleResponse(res)
+  },
+  async createClient(data) {
+    const res = await fetch(`${API_BASE_URL}/api/clients`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
+    })
+    return handleResponse(res)
+  },
 
   // Plans
   async getPlans() {
-    return this.request('/plans')
-  }
-
-  async getPlan(id) {
-    return this.request(`/plans/${id}`)
-  }
-
-  async createPlan(planData) {
-    return this.request('/plans', {
-      method: 'POST',
-      body: JSON.stringify(planData)
+    const res = await fetch(`${API_BASE_URL}/api/plans`, {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
     })
-  }
-
-  async updatePlan(id, planData) {
-    return this.request(`/plans/${id}`, {
+    return handleResponse(res)
+  },
+  async updatePlan(id, data) {
+    const res = await fetch(`${API_BASE_URL}/api/plans/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(planData)
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
     })
-  }
-
+    return handleResponse(res)
+  },
   async deletePlan(id) {
-    return this.request(`/plans/${id}`, {
-      method: 'DELETE'
+    const res = await fetch(`${API_BASE_URL}/api/plans/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
     })
-  }
-
-  // Matériaux
-  async getMaterials(planId = null) {
-    const endpoint = planId ? `/materials?planId=${planId}` : '/materials'
-    return this.request(endpoint)
-  }
-
-  async getMaterial(id) {
-    return this.request(`/materials/${id}`)
-  }
-
-  async createMaterial(materialData) {
-    return this.request('/materials', {
+    return handleResponse(res)
+  },
+  async createPlan(data) {
+    const res = await fetch(`${API_BASE_URL}/api/plans`, {
       method: 'POST',
-      body: JSON.stringify(materialData)
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
     })
-  }
-
-  async updateMaterial(id, materialData) {
-    return this.request(`/materials/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(materialData)
-    })
-  }
-
-  async deleteMaterial(id) {
-    return this.request(`/materials/${id}`, {
-      method: 'DELETE'
-    })
-  }
-
-  // Interventions
-  async getInterventions(planId = null) {
-    const endpoint = planId ? `/interventions?planId=${planId}` : '/interventions'
-    return this.request(endpoint)
-  }
-
-  async getIntervention(id) {
-    return this.request(`/interventions/${id}`)
-  }
-
-  async createIntervention(interventionData) {
-    return this.request('/interventions', {
-      method: 'POST',
-      body: JSON.stringify(interventionData)
-    })
-  }
-
-  async updateIntervention(id, interventionData) {
-    return this.request(`/interventions/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(interventionData)
-    })
-  }
-
-  async deleteIntervention(id) {
-    return this.request(`/interventions/${id}`, {
-      method: 'DELETE'
-    })
-  }
-
-  // Jumeaux numériques
-  async getDigitalTwins(planId = null) {
-    const endpoint = planId ? `/digital-twins?planId=${planId}` : '/digital-twins'
-    return this.request(endpoint)
-  }
-
-  async getDigitalTwin(id) {
-    return this.request(`/digital-twins/${id}`)
-  }
-
-  async createDigitalTwin(twinData) {
-    return this.request('/digital-twins', {
-      method: 'POST',
-      body: JSON.stringify(twinData)
-    })
-  }
-
-  async updateDigitalTwin(id, twinData) {
-    return this.request(`/digital-twins/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(twinData)
-    })
-  }
-
-  async deleteDigitalTwin(id) {
-    return this.request(`/digital-twins/${id}`, {
-      method: 'DELETE'
-    })
-  }
-
-  // Calques
-  async getPlanLayers(planId) {
-    return this.request(`/plan-layers?planId=${planId}`)
-  }
-
-  async getPlanLayer(id) {
-    return this.request(`/plan-layers/${id}`)
-  }
-
-  async createPlanLayer(layerData) {
-    return this.request('/plan-layers', {
-      method: 'POST',
-      body: JSON.stringify(layerData)
-    })
-  }
-
-  async updatePlanLayer(id, layerData) {
-    return this.request(`/plan-layers/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(layerData)
-    })
-  }
-
-  async deletePlanLayer(id) {
-    return this.request(`/plan-layers/${id}`, {
-      method: 'DELETE'
-    })
-  }
+    return handleResponse(res)
+  },
 
   // Exports
   async getExports() {
-    return this.request('/exports')
-  }
-
-  async getExport(id) {
-    return this.request(`/exports/${id}`)
-  }
-
-  async createExport(exportData) {
-    return this.request('/exports', {
-      method: 'POST',
-      body: JSON.stringify(exportData)
+    const res = await fetch(`${API_BASE_URL}/api/exports`, {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
     })
-  }
-
-  async deleteExport(id) {
-    return this.request(`/exports/${id}`, {
-      method: 'DELETE'
-    })
-  }
-
-  async downloadExport(id) {
-    const token = localStorage.getItem('paloma_token')
-    const response = await fetch(`${this.baseURL}/exports/${id}/download`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    return response.blob()
-  }
-
-  // Utilisateurs
-  async getUsers() {
-    return this.request('/users')
-  }
-
-  async getUser(id) {
-    return this.request(`/users/${id}`)
-  }
-
-  async createUser(userData) {
-    return this.request('/users', {
-      method: 'POST',
-      body: JSON.stringify(userData)
-    })
-  }
-
-  async updateUser(id, userData) {
-    return this.request(`/users/${id}`, {
+    return handleResponse(res)
+  },
+  async updateExport(id, data) {
+    const res = await fetch(`${API_BASE_URL}/api/exports/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(userData)
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
     })
-  }
-
-  async deleteUser(id) {
-    return this.request(`/users/${id}`, {
-      method: 'DELETE'
+    return handleResponse(res)
+  },
+  async deleteExport(id) {
+    const res = await fetch(`${API_BASE_URL}/api/exports/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
     })
-  }
-
-  // Upload de fichiers
-  async uploadFile(file, type = 'plan') {
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('type', type)
-
-    const token = localStorage.getItem('paloma_token')
-    const response = await fetch(`${this.baseURL}/upload`, {
+    return handleResponse(res)
+  },
+  async createExport(data) {
+    const res = await fetch(`${API_BASE_URL}/api/exports`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      body: formData
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
     })
+    return handleResponse(res)
+  },
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
+  // Interventions
+  async getInterventions() {
+    const res = await fetch(`${API_BASE_URL}/api/interventions`, {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    return handleResponse(res)
+  },
+  async updateIntervention(id, data) {
+    const res = await fetch(`${API_BASE_URL}/api/interventions/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
+    })
+    return handleResponse(res)
+  },
+  async deleteIntervention(id) {
+    const res = await fetch(`${API_BASE_URL}/api/interventions/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    return handleResponse(res)
+  },
+  async createIntervention(data) {
+    const res = await fetch(`${API_BASE_URL}/api/interventions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
+    })
+    return handleResponse(res)
+  },
 
-    return response.json()
+  // Matériaux
+  async getMaterials() {
+    const res = await fetch(`${API_BASE_URL}/api/materials`, {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    return handleResponse(res)
+  },
+  async updateMaterial(id, data) {
+    const res = await fetch(`${API_BASE_URL}/api/materials/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
+    })
+    return handleResponse(res)
+  },
+  async deleteMaterial(id) {
+    const res = await fetch(`${API_BASE_URL}/api/materials/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    return handleResponse(res)
+  },
+  async createMaterial(data) {
+    const res = await fetch(`${API_BASE_URL}/api/materials`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
+    })
+    return handleResponse(res)
   }
-}
-
-export default new ApiService() 
+} 

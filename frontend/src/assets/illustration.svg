@@ -1,0 +1,16 @@
+<svg width="300" height="220" viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond cercle bleu très clair -->
+  <circle cx="150" cy="110" r="100" fill="#e3f0fa"/>
+  <!-- Logo centré -->
+  <image href="./paloma-logo.svg" x="100" y="70" height="50" width="100"/>
+  <!-- Ligne horizontale stylisée -->
+  <rect x="80" y="140" width="140" height="6" rx="3" fill="#2563eb" opacity="0.15"/>
+  <!-- Trois petits cercles (collaboration, data, cloud) -->
+  <circle cx="110" cy="155" r="8" fill="#60a5fa" opacity="0.7"/>
+  <circle cx="150" cy="160" r="8" fill="#2563eb" opacity="0.7"/>
+  <circle cx="190" cy="155" r="8" fill="#3b82f6" opacity="0.7"/>
+  <!-- Titre -->
+  <text x="150" y="200" text-anchor="middle" fill="#2563eb" font-size="15" font-family="Arial" font-weight="bold">
+    Portail Métier PALOMA
+  </text>
+</svg>

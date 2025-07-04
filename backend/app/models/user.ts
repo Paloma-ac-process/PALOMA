@@ -23,8 +23,14 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
-  declare role: string // 'client', 'admin', 'chef_projet', 'ingenieur'
+  declare role: string 
 
+  @column()
+  declare verificationCode: string | null
+
+  @column()
+  declare isVerified: boolean
+  
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

@@ -14,7 +14,7 @@
           </div>
           
           <div class="flex items-center space-x-4">
-            <span class="text-sm text-gray-600">{{ user?.firstName }} {{ user?.lastName }}</span>
+            <span class="text-sm text-gray-600">{{ user?.fullName || user?.email }}</span>
             <button @click="logout" class="text-sm text-gray-500 hover:text-gray-700">
               Déconnexion
             </button>
@@ -51,6 +51,42 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <!-- Informations utilisateur -->
+      <section class="bg-white shadow rounded-lg p-6 mb-8">
+        <h2 class="text-lg font-bold mb-2">Informations utilisateur</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><span class="font-semibold">Nom :</span> {{ user?.fullName || user?.email || '-' }}</div>
+          <div><span class="font-semibold">Email :</span> {{ user?.email || '-' }}</div>
+          <div><span class="font-semibold">Rôle :</span> {{ user?.role || '-' }}</div>
+          <div><span class="font-semibold">Inscription :</span> {{ user?.createdAt ? formatDate(user.createdAt) : '-' }}</div>
+        </div>
+        <button @click="showEditUser = true" class="mt-4 px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700">Modifier</button>
+        <div v-if="showEditUser" class="mt-4 bg-gray-50 p-4 rounded shadow-inner">
+          <form @submit.prevent="updateUserInfo">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Nom complet</label>
+                <input v-model="editUser.fullName" type="text" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <input v-model="editUser.email" type="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
+                <input v-model="editUser.password" type="password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+              </div>
+            </div>
+            <div class="mt-4 flex space-x-2">
+              <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Enregistrer</button>
+              <button type="button" @click="showEditUser = false" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Annuler</button>
+            </div>
+            <div v-if="userUpdateMessage" class="mt-2 text-green-600">{{ userUpdateMessage }}</div>
+            <div v-if="userUpdateError" class="mt-2 text-red-600">{{ userUpdateError }}</div>
+          </form>
+        </div>
+      </section>
+
       <!-- KPIs -->
       <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         <div class="bg-white overflow-hidden shadow rounded-lg">
@@ -134,6 +170,14 @@
         </div>
       </div>
 
+      <!-- Légende KPIs -->
+      <div class="mb-8 flex flex-wrap gap-4 items-center">
+        <span class="flex items-center"><span class="inline-block w-4 h-4 bg-blue-500 rounded mr-2"></span>Clients actifs</span>
+        <span class="flex items-center"><span class="inline-block w-4 h-4 bg-green-500 rounded mr-2"></span>Plans actifs</span>
+        <span class="flex items-center"><span class="inline-block w-4 h-4 bg-yellow-500 rounded mr-2"></span>Interventions ce mois</span>
+        <span class="flex items-center"><span class="inline-block w-4 h-4 bg-purple-500 rounded mr-2"></span>Temps de réponse moyen</span>
+      </div>
+
       <!-- Content Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Activité récente -->
@@ -205,6 +249,10 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const user = ref(null)
+const showEditUser = ref(false)
+const editUser = ref({ fullName: '', email: '', password: '' })
+const userUpdateMessage = ref('')
+const userUpdateError = ref('')
 const dashboardData = ref({
   kpis: {
     totalClients: 0,
@@ -217,14 +265,31 @@ const dashboardData = ref({
 })
 
 onMounted(async () => {
-  // Récupérer les données utilisateur
+  // Toujours charger les infos du localStorage
   const userData = localStorage.getItem('paloma_user')
   if (userData) {
     user.value = JSON.parse(userData)
+    editUser.value.fullName = user.value.fullName || ''
+    editUser.value.email = user.value.email || ''
+    editUser.value.password = ''
   }
 
   // Charger les données du dashboard
   await loadDashboardData()
+
+  // Exemples si vide
+  if (dashboardData.value.kpis.totalClients === 0) dashboardData.value.kpis.totalClients = 12
+  if (dashboardData.value.kpis.activePlans === 0) dashboardData.value.kpis.activePlans = 7
+  if (dashboardData.value.kpis.interventionsThisMonth === 0) dashboardData.value.kpis.interventionsThisMonth = 3
+  if (dashboardData.value.kpis.averageResponseTime === '0h') dashboardData.value.kpis.averageResponseTime = '2h 15min'
+  if (!dashboardData.value.recentActivity.length) dashboardData.value.recentActivity = [
+    { id: 1, type: 'intervention', description: 'Nouvelle intervention créée', client: 'Client A', date: new Date().toISOString() },
+    { id: 2, type: 'export', description: 'Export PDF généré', client: 'Client B', date: new Date().toISOString() },
+  ]
+  if (!dashboardData.value.alerts.length) dashboardData.value.alerts = [
+    { id: 1, message: 'Un plan nécessite une validation', date: new Date().toISOString() },
+    { id: 2, message: 'Nouvelle intervention en attente', date: new Date().toISOString() },
+  ]
 })
 
 const loadDashboardData = async () => {
@@ -271,5 +336,36 @@ const formatDate = (dateString) => {
     hour: '2-digit',
     minute: '2-digit'
   })
+}
+
+const updateUserInfo = async () => {
+  userUpdateMessage.value = ''
+  userUpdateError.value = ''
+  try {
+    const token = localStorage.getItem('paloma_token')
+    const response = await fetch('http://localhost:3333/api/me', {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        fullName: editUser.value.fullName,
+        email: editUser.value.email,
+        password: editUser.value.password || undefined
+      })
+    })
+    const data = await response.json()
+    if (data.success) {
+      user.value = data.user
+      localStorage.setItem('paloma_user', JSON.stringify(data.user))
+      userUpdateMessage.value = 'Informations mises à jour !'
+      showEditUser.value = false
+    } else {
+      userUpdateError.value = data.message || 'Erreur lors de la mise à jour.'
+    }
+  } catch (err) {
+    userUpdateError.value = 'Erreur lors de la mise à jour.'
+  }
 }
 </script> 

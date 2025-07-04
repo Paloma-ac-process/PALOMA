@@ -1,8 +1,10 @@
 <script setup>
-import { onMounted } from 'vue'
-import MaterialButton from '@/components/MaterialButton.vue'
+import { onMounted, computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 
-const apps = [
+const authStore = useAuthStore()
+
+const allApps = [
   {
     name: 'Reporting',
     icon: 'ni ni-collection',
@@ -43,9 +45,18 @@ const apps = [
     icon: 'ni ni-archive-2',
     iconBg: 'bg-secondary',
     desc: 'Accédez à une large source de connaissance.',
-    url: 'http://ac-process.com'
+    url: 'https://dbfiler.ac-process.com/'
   }
 ]
+
+const apps = computed(() => {
+  const role = authStore.getUser && authStore.getUser.role
+  if (role === 'admin') {
+    return allApps
+  }
+  // Pour les clients, ne montrer que Reporting et Thermique
+  return allApps.filter(app => ['Reporting', 'Thermique'].includes(app.name))
+})
 
 onMounted(() => {
   window.scrollTo(0, 0)

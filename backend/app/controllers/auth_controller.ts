@@ -1,5 +1,7 @@
 import User from '#models/user'
 import { HttpContext } from '@adonisjs/core/http'
+import VerificationCodeMail from '#mails/verification_code'
+import { randomInt } from 'crypto'
 
 export default class AuthController {
   /**
@@ -19,29 +21,36 @@ export default class AuthController {
   /**
    * Traiter l'inscription d'un nouvel utilisateur (API)
    */
-  async register({ request, auth, response }: HttpContext) {
+  async register({ request, response }: HttpContext) {
     const { email, password, fullName } = request.only(['email', 'password', 'fullName'])
 
     try {
-      // Créer le nouvel utilisateur
+      // Générer un code de vérification à 6 chiffres
+      const verificationCode = String(randomInt(100000, 999999))
+
+      // Créer le nouvel utilisateur avec le code et isVerified à false
       const user = await User.create({
         email,
         password,
         fullName,
+        verificationCode,
+        isVerified: false,
       })
 
-      // Connecter l'utilisateur après l'inscription
-      await auth.use('web').login(user)
+      // Envoyer le mail de vérification
+      const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
+      await mail.send(new VerificationCodeMail(email, verificationCode))
 
       return response.json({
         success: true,
-        message: 'Utilisateur créé avec succès',
+        message: 'Utilisateur créé. Un code de vérification a été envoyé par email.',
         user: {
           id: user.id,
           email: user.email,
           fullName: user.fullName,
           role: user.role,
-          createdAt: user.createdAt
+          createdAt: user.createdAt,
+          isVerified: user.isVerified
         }
       })
     } catch (error) {
@@ -54,6 +63,24 @@ export default class AuthController {
   }
 
   /**
+   * Vérifier le code de vérification reçu par email
+   */
+  async verifyCode({ request, response }: HttpContext) {
+    const { email, code } = request.only(['email', 'code'])
+    const user = await User.findBy('email', email)
+    if (!user) {
+      return response.status(404).json({ success: false, message: 'Utilisateur non trouvé' })
+    }
+    if (user.verificationCode !== code) {
+      return response.status(400).json({ success: false, message: 'Code de vérification invalide' })
+    }
+    user.isVerified = true
+    user.verificationCode = null
+    await user.save()
+    return response.json({ success: true, message: 'Compte vérifié avec succès' })
+  }
+
+  /**
    * Traiter la connexion d'un utilisateur (API)
    */
   async login({ request, auth, response }: HttpContext) {
@@ -62,6 +89,14 @@ export default class AuthController {
     try {
       // Vérifier les identifiants
       const user = await User.verifyCredentials(email, password)
+
+      // Vérifier si le compte est vérifié
+      if (!user.isVerified) {
+        return response.status(403).json({
+          success: false,
+          message: 'Votre compte n\'est pas encore vérifié. Veuillez vérifier votre email.'
+        })
+      }
 
       // Connecter l'utilisateur
       await auth.use('web').login(user)
@@ -164,5 +199,62 @@ export default class AuthController {
         error: error.message
       })
     }
+  }
+
+  /**
+   * Renvoyer le code de vérification par email
+   */
+  async resendCode({ request, response }: HttpContext) {
+    const { email } = request.only(['email'])
+    const user = await User.findBy('email', email)
+    if (!user) {
+      return response.status(404).json({ success: false, message: 'Utilisateur non trouvé' })
+    }
+    if (user.isVerified) {
+      return response.status(400).json({ success: false, message: 'Compte déjà vérifié' })
+    }
+    // Générer un nouveau code
+    const verificationCode = String(Math.floor(100000 + Math.random() * 900000))
+    user.verificationCode = verificationCode
+    await user.save()
+    const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
+    await mail.send(new VerificationCodeMail(email, verificationCode))
+    return response.json({ success: true, message: 'Nouveau code envoyé par email' })
+  }
+
+  /**
+   * Envoyer un code de réinitialisation de mot de passe
+   */
+  async forgotPassword({ request, response }: HttpContext) {
+    const { email } = request.only(['email'])
+    const user = await User.findBy('email', email)
+    if (!user) {
+      return response.status(404).json({ success: false, message: 'Utilisateur non trouvé' })
+    }
+    // Générer un code de réinitialisation
+    const resetCode = String(Math.floor(100000 + Math.random() * 900000))
+    user.verificationCode = resetCode
+    await user.save()
+    const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
+    await mail.send(new VerificationCodeMail(email, resetCode))
+    return response.json({ success: true, message: 'Un code de réinitialisation a été envoyé par email' })
+  }
+
+  /**
+   * Réinitialiser le mot de passe avec le code reçu
+   */
+  async resetPassword({ request, response }: HttpContext) {
+    const { email, code, newPassword } = request.only(['email', 'code', 'newPassword'])
+    const user = await User.findBy('email', email)
+    if (!user) {
+      return response.status(404).json({ success: false, message: 'Utilisateur non trouvé' })
+    }
+    if (user.verificationCode !== code) {
+      return response.status(400).json({ success: false, message: 'Code de réinitialisation invalide' })
+    }
+    user.password = newPassword
+    user.verificationCode = null
+    await user.save()
+    return response.json({ success: true, message: 'Mot de passe réinitialisé avec succès' })
   }
 } 

@@ -24,5 +24,9 @@ router.group(() => {
   router.post('/logout', '#controllers/auth_controller.logout').use(middleware.auth())
   router.get('/me', '#controllers/auth_controller.me').use(middleware.auth())
   router.put('/me', '#controllers/auth_controller.updateMe').use(middleware.auth())
+  router.post('/verify-code', '#controllers/auth_controller.verifyCode')
+  router.post('/resend-code', '#controllers/auth_controller.resendCode')
+  router.post('/forgot-password', '#controllers/auth_controller.forgotPassword')
+  router.post('/reset-password', '#controllers/auth_controller.resetPassword')
   // ... autres routes API si besoin
 }).prefix('/api')
