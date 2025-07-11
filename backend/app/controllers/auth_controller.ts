@@ -37,9 +37,20 @@ export default class AuthController {
         isVerified: false,
       })
 
-      // Envoyer le mail de vérification
-      const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
-      await mail.send(new VerificationCodeMail(email, verificationCode))
+      // Envoyer le mail de vérification (HTML direct, sans template)
+      try {
+        const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
+        await mail.send((message) => {
+          message
+            .to(email)
+            .from('noreplyactest@gmail.com')
+            .subject('Votre code de vérification')
+            .html(`<h2>Votre code de vérification</h2><p>Bonjour,</p><p>Voici votre code : <b>${verificationCode}</b></p>`)
+        })
+      } catch (mailError) {
+        console.log('Erreur envoi mail:', mailError.message)
+        // On continue même si l'email ne peut pas être envoyé
+      }
 
       return response.json({
         success: true,
@@ -217,8 +228,15 @@ export default class AuthController {
     const verificationCode = String(Math.floor(100000 + Math.random() * 900000))
     user.verificationCode = verificationCode
     await user.save()
+    // Envoyer le mail de vérification (HTML direct, sans template)
     const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
-    await mail.send(new VerificationCodeMail(email, verificationCode))
+    await mail.send((message) => {
+      message
+        .to(email)
+        .from('noreplyactest@gmail.com')
+        .subject('Votre code de vérification')
+        .html(`<h2>Votre code de vérification</h2><p>Bonjour,</p><p>Voici votre code : <b>${verificationCode}</b></p>`)
+    })
     return response.json({ success: true, message: 'Nouveau code envoyé par email' })
   }
 

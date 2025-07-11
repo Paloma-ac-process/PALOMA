@@ -1,11 +1,10 @@
-import { defineConfig } from '@adonisjs/mail'
+import { defineConfig, transports } from '@adonisjs/mail'
 import env from '#start/env'
 
 export default defineConfig({
-  mailer: 'smtp',
+  default: 'smtp',
   mailers: {
-    smtp: {
-      driver: 'smtp',
+    smtp: transports.smtp({
       host: env.get('SMTP_HOST'),
       port: env.get('SMTP_PORT'),
       auth: {
@@ -13,8 +12,11 @@ export default defineConfig({
         user: env.get('SMTP_USER'),
         pass: env.get('SMTP_PASS'),
       },
-      secure: false, // STARTTLS
-    },
+      secure: false,
+    }),
   },
-  from: env.get('SMTP_USER'),
-}) 
+  from: {
+    address: env.get('SMTP_USER'),
+    name: env.get('APP_NAME', 'AdonisJS App'),
+  },
+})

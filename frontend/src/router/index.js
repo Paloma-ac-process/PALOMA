@@ -43,7 +43,7 @@ const router = createRouter({
 
 // Navigation guard pour forcer l'authentification et le rôle sur tout le site
 router.beforeEach(async (to, from, next) => {
-  const publicRoutes = ['/login', '/register', '/forgot-password']
+  const publicRoutes = ['/login', '/register', '/forgot-password', '/activate-account']
   if (publicRoutes.includes(to.path)) {
     next()
     return

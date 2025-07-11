@@ -31,14 +31,6 @@
           <button type="button" @click="handleResendCode" :disabled="resendLoading || !email" class="mt-2 text-sm text-indigo-700 underline">Renvoyer le code</button>
           <div v-if="resendMessage" class="text-green-600 text-sm mt-1">{{ resendMessage }}</div>
           <div v-if="resendError" class="text-red-600 text-sm mt-1">{{ resendError }}</div>
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
-            <input v-model="password" type="password" required class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Créer un mot de passe" />
-          </div>
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
-            <input v-model="passwordConfirm" type="password" required class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Confirmer le mot de passe" />
-          </div>
           <div v-if="message" class="bg-green-50 border border-green-200 rounded-md p-3 mb-2 text-green-700 text-sm">{{ message }}</div>
           <div v-if="error" class="bg-red-50 border border-red-200 rounded-md p-3 mb-2 text-red-700 text-sm">{{ error }}</div>
           <button type="submit" :disabled="loading" class="w-full bg-orange-600 text-white font-semibold py-2 rounded-lg hover:bg-orange-700 transition flex items-center justify-center">
@@ -56,13 +48,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import authService from '@/services/authService'
 
 const email = ref('')
 const code = ref('')
-const password = ref('')
-const passwordConfirm = ref('')
 const loading = ref(false)
 const error = ref('')
 const message = ref('')
@@ -71,6 +61,8 @@ const resendError = ref('')
 const resendLoading = ref(false)
 
 const route = useRoute()
+const router = useRouter()
+
 onMounted(() => {
   if (route.query.email) {
     email.value = route.query.email
@@ -83,7 +75,10 @@ const handleActivateAccount = async () => {
   loading.value = true
   try {
     await authService.verifyCode({ email: email.value, code: code.value })
-    message.value = 'Votre compte a bien été activé. Vous pouvez vous connecter.'
+    message.value = 'Votre compte a bien été activé. Vous allez être redirigé vers la connexion.'
+    setTimeout(() => {
+      router.push('/login')
+    }, 1500)
   } catch (err) {
     error.value = err.message || 'Erreur lors de la vérification.'
   } finally {
