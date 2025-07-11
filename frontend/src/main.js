@@ -1,4 +1,8 @@
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap'
 import '@/assets/main.css'
+// Pour les icônes Nucleo ou FontAwesome, ajoute le lien CDN dans public/index.html si besoin
+// <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

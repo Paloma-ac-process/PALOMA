@@ -12,13 +12,6 @@
             </div>
             <h1 class="ml-3 text-xl font-semibold text-gray-900">PALOMA ERP</h1>
           </div>
-          
-          <div class="flex items-center space-x-4">
-            <span class="text-sm text-gray-600">{{ user?.fullName || user?.email }}</span>
-            <button @click="logout" class="text-sm text-gray-500 hover:text-gray-700">
-              Déconnexion
-            </button>
-          </div>
         </div>
       </div>
     </header>

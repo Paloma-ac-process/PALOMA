@@ -1,12 +1,13 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+import AppHeader from '@/components/AppHeader.vue'
+import { computed } from 'vue'
+
+const authStore = useAuthStore()
+const isAuthenticated = computed(() => authStore.getIsAuthenticated)
 </script>
 
 <template>
-  <Header />
-
-  <!-- contenu des vues -->
-  <RouterView />
-
-  <Footer />
+  <AppHeader v-if="isAuthenticated" />
+  <router-view />
 </template>

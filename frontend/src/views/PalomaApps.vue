@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
+import MaterialButton from '@/components/MaterialButton.vue'
 
 const authStore = useAuthStore()
 
@@ -54,8 +55,8 @@ const apps = computed(() => {
   if (role === 'admin') {
     return allApps
   }
-  // Pour les clients, ne montrer que Reporting et Thermique
-  return allApps.filter(app => ['Reporting', 'Thermique'].includes(app.name))
+  // Pour les clients, montrer Reporting, Thermique et Base de données
+  return allApps.filter(app => ['Reporting', 'Thermique', 'Base de données'].includes(app.name))
 })
 
 onMounted(() => {

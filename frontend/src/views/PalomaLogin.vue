@@ -67,7 +67,7 @@ const handleLogin = async () => {
       localStorage.setItem('paloma_user', JSON.stringify(data.user || {}))
       form.email = ''
       form.password = ''
-      router.push('/paloma/dashboard')
+      router.push('/paloma-apps')
     } else {
       error.value = data.message || 'Erreur de connexion'
     }

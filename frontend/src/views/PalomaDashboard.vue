@@ -12,13 +12,6 @@
             </div>
             <h1 class="ml-3 text-xl font-semibold text-gray-900">PALOMA ERP</h1>
           </div>
-          
-          <div class="flex items-center space-x-4">
-            <span class="text-sm text-gray-600">{{ user?.fullName || user?.email }}</span>
-            <button @click="logout" class="text-sm text-gray-500 hover:text-gray-700">
-              Déconnexion
-            </button>
-          </div>
         </div>
       </div>
     </header>
@@ -88,7 +81,7 @@
       </section>
 
       <!-- KPIs -->
-      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+      <div v-if="dashboardData.kpis && Object.keys(dashboardData.kpis).length" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         <div class="bg-white overflow-hidden shadow rounded-lg">
           <div class="p-5">
             <div class="flex items-center">
@@ -171,7 +164,7 @@
       </div>
 
       <!-- Légende KPIs -->
-      <div class="mb-8 flex flex-wrap gap-4 items-center">
+      <div v-if="dashboardData.kpis && Object.keys(dashboardData.kpis).length" class="mb-8 flex flex-wrap gap-4 items-center">
         <span class="flex items-center"><span class="inline-block w-4 h-4 bg-blue-500 rounded mr-2"></span>Clients actifs</span>
         <span class="flex items-center"><span class="inline-block w-4 h-4 bg-green-500 rounded mr-2"></span>Plans actifs</span>
         <span class="flex items-center"><span class="inline-block w-4 h-4 bg-yellow-500 rounded mr-2"></span>Interventions ce mois</span>
@@ -181,7 +174,7 @@
       <!-- Content Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Activité récente -->
-        <div class="bg-white shadow rounded-lg">
+        <div v-if="dashboardData.recentActivity && dashboardData.recentActivity.length" class="bg-white shadow rounded-lg">
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
               Activité récente
@@ -218,7 +211,7 @@
         </div>
 
         <!-- Alertes -->
-        <div class="bg-white shadow rounded-lg">
+        <div v-if="dashboardData.alerts && dashboardData.alerts.length" class="bg-white shadow rounded-lg">
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
               Alertes
@@ -276,20 +269,6 @@ onMounted(async () => {
 
   // Charger les données du dashboard
   await loadDashboardData()
-
-  // Exemples si vide
-  if (dashboardData.value.kpis.totalClients === 0) dashboardData.value.kpis.totalClients = 12
-  if (dashboardData.value.kpis.activePlans === 0) dashboardData.value.kpis.activePlans = 7
-  if (dashboardData.value.kpis.interventionsThisMonth === 0) dashboardData.value.kpis.interventionsThisMonth = 3
-  if (dashboardData.value.kpis.averageResponseTime === '0h') dashboardData.value.kpis.averageResponseTime = '2h 15min'
-  if (!dashboardData.value.recentActivity.length) dashboardData.value.recentActivity = [
-    { id: 1, type: 'intervention', description: 'Nouvelle intervention créée', client: 'Client A', date: new Date().toISOString() },
-    { id: 2, type: 'export', description: 'Export PDF généré', client: 'Client B', date: new Date().toISOString() },
-  ]
-  if (!dashboardData.value.alerts.length) dashboardData.value.alerts = [
-    { id: 1, message: 'Un plan nécessite une validation', date: new Date().toISOString() },
-    { id: 2, message: 'Nouvelle intervention en attente', date: new Date().toISOString() },
-  ]
 })
 
 const loadDashboardData = async () => {
