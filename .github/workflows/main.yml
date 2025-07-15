@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+  deployments: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -34,4 +38,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: paloma
           directory: frontend/dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }} 
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
