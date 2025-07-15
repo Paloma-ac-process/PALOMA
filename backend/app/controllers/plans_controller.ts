@@ -16,8 +16,7 @@ export default class PlansController {
     return response.json(plan)
   }
 
-  async store({ request, auth, response }: HttpContext) {
-    const user = auth.user!
+  async store({ request, response }: HttpContext) {
     const data = request.only(['name', 'clientId', 'filePath'])
     const plan = await Plan.create(data)
     return response.json(plan)

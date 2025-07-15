@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import Plan from './plan.ts'
+import Plan from './plan.js'
 
 export default class Client extends BaseModel {
   @column({ isPrimary: true })
@@ -19,5 +19,5 @@ export default class Client extends BaseModel {
   declare updatedAt: DateTime | null
 
   @hasMany(() => Plan)
-  declare plans
+  declare plans: any
 } 
