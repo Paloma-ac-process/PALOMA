@@ -17,6 +17,13 @@ router.get('/', async () => {
   }
 })
 
+router.get('/health', async () => {
+  return {
+    status: 'ok',
+    timestamp: new Date().toISOString()
+  }
+})
+
 // Routes d'authentification API
 router.group(() => {
   router.post('/register', '#controllers/auth_controller.register')
