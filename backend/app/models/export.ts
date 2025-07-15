@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
-import Client from './client'
+import Client from './client.js'
 
 export default class Export extends BaseModel {
   @column({ isPrimary: true })
@@ -25,5 +25,5 @@ export default class Export extends BaseModel {
   declare updatedAt: DateTime | null
 
   @belongsTo(() => Client)
-  declare client
+  declare client: any
 } 
