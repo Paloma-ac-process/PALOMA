@@ -274,7 +274,7 @@ onMounted(async () => {
 const loadDashboardData = async () => {
   try {
     const token = localStorage.getItem('paloma_token')
-    const response = await fetch('http://localhost:3333/api/dashboard', {
+    const response = await fetch('https://paloma-production.up.railway.app/api/dashboard', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -322,7 +322,7 @@ const updateUserInfo = async () => {
   userUpdateError.value = ''
   try {
     const token = localStorage.getItem('paloma_token')
-    const response = await fetch('http://localhost:3333/api/me', {
+    const response = await fetch('https://paloma-production.up.railway.app/api/me', {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,

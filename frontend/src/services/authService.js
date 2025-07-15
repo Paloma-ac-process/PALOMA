@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3333' // URL du backend AdonisJS
+import { getApiUrl } from '../config/api.js'
 
 class AuthService {
   /**
@@ -6,7 +6,7 @@ class AuthService {
    */
   async register(userData) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/register`, {
+      const response = await fetch(getApiUrl('/api/register'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ class AuthService {
    */
   async login(credentials) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/login`, {
+      const response = await fetch(getApiUrl('/api/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ class AuthService {
    */
   async logout() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/logout`, {
+      const response = await fetch(getApiUrl('/api/logout'), {
         method: 'POST',
         credentials: 'include',
       })
@@ -80,7 +80,7 @@ class AuthService {
    */
   async checkAuth() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/me`, {
+      const response = await fetch(getApiUrl('/api/me'), {
         credentials: 'include',
       })
 
@@ -100,7 +100,7 @@ class AuthService {
    */
   async verifyCode({ email, code }) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/verify-code`, {
+      const response = await fetch(getApiUrl('/api/verify-code'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ class AuthService {
    */
   async resendCode(email) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/resend-code`, {
+      const response = await fetch(getApiUrl('/api/resend-code'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ class AuthService {
    */
   async forgotPassword(email) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/forgot-password`, {
+      const response = await fetch(getApiUrl('/api/forgot-password'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ class AuthService {
    */
   async resetPassword({ email, code, newPassword }) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/reset-password`, {
+      const response = await fetch(getApiUrl('/api/reset-password'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

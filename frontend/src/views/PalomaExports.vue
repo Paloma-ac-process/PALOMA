@@ -272,7 +272,7 @@ onMounted(async () => {
 const loadExports = async () => {
   try {
     const token = localStorage.getItem('paloma_token')
-    const response = await fetch('http://localhost:3333/api/exports', {
+    const response = await fetch('https://paloma-production.up.railway.app/api/exports', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -290,7 +290,7 @@ const loadExports = async () => {
 const loadClients = async () => {
   try {
     const token = localStorage.getItem('paloma_token')
-    const response = await fetch('http://localhost:3333/api/clients', {
+    const response = await fetch('https://paloma-production.up.railway.app/api/clients', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -314,7 +314,7 @@ const logout = () => {
 const createExport = async () => {
   try {
     const token = localStorage.getItem('paloma_token')
-    const response = await fetch('http://localhost:3333/api/exports', {
+    const response = await fetch('https://paloma-production.up.railway.app/api/exports', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -335,7 +335,7 @@ const createExport = async () => {
 const downloadExport = async (exportItem) => {
   try {
     const token = localStorage.getItem('paloma_token')
-    const response = await fetch(`http://localhost:3333/api/exports/${exportItem.id}/download`, {
+    const response = await fetch(`https://paloma-production.up.railway.app/api/exports/${exportItem.id}/download`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -362,7 +362,7 @@ const deleteExport = async (exportItem) => {
 
   try {
     const token = localStorage.getItem('paloma_token')
-    const response = await fetch(`http://localhost:3333/api/exports/${exportItem.id}`, {
+    const response = await fetch(`https://paloma-production.up.railway.app/api/exports/${exportItem.id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`

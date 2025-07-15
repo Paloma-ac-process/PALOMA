@@ -318,7 +318,7 @@ onMounted(async () => {
 const loadPlans = async () => {
   try {
     const token = localStorage.getItem('paloma_token')
-    const response = await fetch('http://localhost:3333/api/plans', {
+    const response = await fetch('https://paloma-production.up.railway.app/api/plans', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -336,7 +336,7 @@ const loadPlans = async () => {
 const loadClients = async () => {
   try {
     const token = localStorage.getItem('paloma_token')
-    const response = await fetch('http://localhost:3333/api/clients', {
+    const response = await fetch('https://paloma-production.up.railway.app/api/clients', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -375,8 +375,8 @@ const savePlan = async () => {
   try {
     const token = localStorage.getItem('paloma_token')
     const url = showEditModal.value 
-      ? `http://localhost:3333/api/plans/${selectedPlan.value.id}`
-      : 'http://localhost:3333/api/plans'
+      ? `https://paloma-production.up.railway.app/api/plans/${selectedPlan.value.id}`
+      : 'https://paloma-production.up.railway.app/api/plans'
     
     const method = showEditModal.value ? 'PUT' : 'POST'
     
