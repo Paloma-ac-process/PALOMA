@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install ALL dependencies (including dev dependencies for build)
+# Install ALL dependencies (including dev dependencies for runtime)
 RUN npm ci
 
 # Copy source code
@@ -14,8 +14,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Remove dev dependencies to reduce image size
-RUN npm prune --production
+# Keep all dependencies (don't prune dev dependencies)
+# RUN npm prune --production
 
 # Expose port
 EXPOSE 3333
