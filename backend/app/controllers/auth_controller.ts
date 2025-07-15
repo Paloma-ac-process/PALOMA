@@ -39,7 +39,7 @@ export default class AuthController {
 
       // Envoyer le mail de vérification (HTML direct, sans template)
       try {
-        const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
+      const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
         await mail.send((message) => {
           message
             .to(email)
