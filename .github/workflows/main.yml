@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: 20
 
+      # Frontend steps
       - name: Install frontend dependencies
         working-directory: ./frontend
         run: npm install
@@ -30,7 +31,21 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages
+      # Backend steps
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm install
+
+      - name: Build backend
+        working-directory: ./backend
+        run: npm run build
+
+      - name: Run backend tests
+        working-directory: ./backend
+        run: npm test
+
+      # Deployments
+      - name: Deploy frontend to Cloudflare Pages
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         uses: cloudflare/pages-action@v1
         with:
@@ -39,3 +54,9 @@ jobs:
           projectName: paloma
           directory: frontend/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy backend to Railway
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          echo "Backend will be automatically deployed by Railway via GitHub integration"
+          echo "Railway is connected to this repository and will deploy on push to master"
