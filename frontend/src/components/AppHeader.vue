@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
     <div class="container-fluid">
       <router-link class="navbar-brand fw-bold" to="/paloma-apps">
-        <img src="/paloma-logo.png" alt="Logo" height="32" class="me-2" />
+        <img src="@/assets/paloma-logo.png" alt="Logo" height="32" class="me-2" />
         PALOMA
       </router-link>
       <div :class="['navbar-collapse', menuOpen ? 'show' : 'collapse']" id="navbarNav">

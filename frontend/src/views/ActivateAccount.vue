@@ -3,7 +3,7 @@
     <div class="flex w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden">
       <!-- Colonne gauche : Branding -->
       <div class="w-1/2 bg-indigo-800 p-8 flex flex-col justify-center items-center">
-        <img src="@/assets/paloma-logo.svg" alt="PALOMA ERP" class="h-12 mb-6" />
+        <img src="@/assets/paloma-logo.png" alt="PALOMA ERP" class="h-12 mb-6" />
         <h2 class="text-2xl font-bold text-white mb-2">Bienvenue dans votre espace</h2>
         <p class="text-indigo-100 mb-8 text-center">
           PALOMA, la solution ERP collaborative qui booste votre productivité
