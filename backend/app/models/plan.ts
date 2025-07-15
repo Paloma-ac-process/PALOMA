@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo, hasMany } from '@adonisjs/lucid/orm'
-import Client from './client.ts'
-import Intervention from './intervention.ts'
-import Material from './material.ts'
+import { BaseModel, column, belongsTo, hasMany } from '@adonisjs/lucid/orm'
+import Client from './client.js'
+import Intervention from './intervention.js'
+import Material from './material.js'
 
 export default class Plan extends BaseModel {
   @column({ isPrimary: true })
@@ -24,11 +24,11 @@ export default class Plan extends BaseModel {
   declare updatedAt: DateTime | null
 
   @belongsTo(() => Client)
-  declare client: BelongsTo<typeof Client>
+  declare client: any
 
   @hasMany(() => Intervention)
-  declare interventions
+  declare interventions: any
 
   @hasMany(() => Material)
-  declare materials
+  declare materials: any
 } 
