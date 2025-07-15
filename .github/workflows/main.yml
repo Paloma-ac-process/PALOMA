@@ -26,24 +26,23 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
-      - name: Install Wrangler CLI
-        run: npm install -g wrangler
-
       - name: Deploy to Cloudflare Pages
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         working-directory: ./frontend
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          # Créer un fichier wrangler.toml temporaire pour le déploiement
+          # Créer un fichier wrangler.toml pour le déploiement
           cat > wrangler.toml << EOF
-          name = "vitrine-client-frontend"
+          name = "paloma-9sq"
           compatibility_date = "2024-01-01"
-          compatibility_flags = ["nodejs_compat"]
           
           [site]
           bucket = "./dist"
           EOF
           
-          # Déployer sur Cloudflare Pages
-          wrangler pages deploy dist --project-name=paloma-9sq --branch=master 
+          # Installer Wrangler
+          npm install -g wrangler
+          
+          # Déployer avec Wrangler
+          wrangler pages deploy dist --project-name=paloma-9sq 
