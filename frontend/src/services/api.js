@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL
+// API service - Using Railway backend URL
+const API_BASE_URL = 'https://paloma-production.up.railway.app'
 
 function getToken() {
   return localStorage.getItem('paloma_token')
@@ -195,4 +196,4 @@ export default {
     })
     return handleResponse(res)
   }
-} 
+}

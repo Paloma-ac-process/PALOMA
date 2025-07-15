@@ -46,7 +46,7 @@ const allApps = [
     icon: 'ni ni-archive-2',
     iconBg: 'bg-secondary',
     desc: 'Accédez à une large source de connaissance.',
-    url: 'https://dbfiler.ac-process.com/'
+    url: 'https://dbfiller.ac-process.com/'
   }
 ]
 
