@@ -28,21 +28,10 @@ jobs:
 
       - name: Deploy to Cloudflare Pages
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        working-directory: ./frontend
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: |
-          # Créer un fichier wrangler.toml pour le déploiement
-          cat > wrangler.toml << EOF
-          name = "paloma-9sq"
-          compatibility_date = "2024-01-01"
-          
-          [site]
-          bucket = "./dist"
-          EOF
-          
-          # Installer Wrangler
-          npm install -g wrangler
-          
-          # Déployer avec Wrangler
-          wrangler pages deploy dist --project-name=paloma-9sq 
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: paloma-9sq
+          directory: frontend/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }} 
