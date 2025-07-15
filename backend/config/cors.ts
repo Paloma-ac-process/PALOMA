@@ -13,6 +13,7 @@ const corsConfig = defineConfig({
     'http://localhost:5173', // Frontend local
     'http://localhost:3000', // Frontend local alternatif
     'https://vitrine-client.pages.dev', // Cloudflare Pages
+    'https://paloma-9sq.pages.dev', // Cloudflare Pages actuel
     env.get('RAILWAY_STATIC_URL', ''), // Railway static URL
     env.get('RAILWAY_PUBLIC_DOMAIN', ''), // Railway public domain
   ].filter(Boolean),
