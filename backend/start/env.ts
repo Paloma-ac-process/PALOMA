@@ -35,8 +35,22 @@ export default await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   SESSION_DRIVER: Env.schema.enum(['cookie', 'memory'] as const),
+  
+  /*
+  |----------------------------------------------------------
+  | Variables for configuring mail package
+  |----------------------------------------------------------
+  */
   SMTP_HOST: Env.schema.string(),
   SMTP_PORT: Env.schema.number(),
   SMTP_USER: Env.schema.string(),
   SMTP_PASS: Env.schema.string(),
+  
+  /*
+  |----------------------------------------------------------
+  | Variables for Railway deployment
+  |----------------------------------------------------------
+  */
+  RAILWAY_STATIC_URL: Env.schema.string.optional(),
+  RAILWAY_PUBLIC_DOMAIN: Env.schema.string.optional(),
 })

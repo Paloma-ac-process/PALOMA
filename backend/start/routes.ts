@@ -9,18 +9,36 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
+import db from '@adonisjs/lucid/services/db'
 
 // Routes publiques
 router.get('/', async () => {
   return {
     hello: 'world',
+    message: 'Vitrine Client Backend API',
+    version: '1.0.0'
   }
 })
 
 router.get('/health', async () => {
-  return {
-    status: 'ok',
-    timestamp: new Date().toISOString()
+  try {
+    // Test simple de la connexion à la base de données
+    await db.rawQuery('SELECT 1')
+    
+    return {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      database: 'connected',
+      environment: process.env.NODE_ENV || 'development'
+    }
+  } catch (error) {
+    return {
+      status: 'error',
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: error.message,
+      environment: process.env.NODE_ENV || 'development'
+    }
   }
 })
 

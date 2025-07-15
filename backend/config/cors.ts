@@ -1,4 +1,5 @@
 import { defineConfig } from '@adonisjs/cors'
+import env from '#start/env'
 
 /**
  * Configuration options to tweak the CORS policy. The following
@@ -8,10 +9,16 @@ import { defineConfig } from '@adonisjs/cors'
  */
 const corsConfig = defineConfig({
   enabled: true,
-  origin: true,
-  methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
+  origin: [
+    'http://localhost:5173', // Frontend local
+    'http://localhost:3000', // Frontend local alternatif
+    'https://vitrine-client.pages.dev', // Cloudflare Pages
+    env.get('RAILWAY_STATIC_URL', ''), // Railway static URL
+    env.get('RAILWAY_PUBLIC_DOMAIN', ''), // Railway public domain
+  ].filter(Boolean),
+  methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   headers: true,
-  exposeHeaders: [],
+  exposeHeaders: ['Content-Length', 'X-Kernel-Id'],
   credentials: true,
   maxAge: 90,
 })
