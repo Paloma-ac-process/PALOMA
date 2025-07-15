@@ -84,4 +84,46 @@ jobs:
           name: build-artifacts
           path: |
             frontend/dist
-            backend 
+            backend
+
+  deploy-frontend:
+    needs: build-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Install Wrangler CLI
+        run: npm install -g wrangler
+
+      - name: Deploy to Cloudflare Pages
+        working-directory: ./frontend
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          # Créer un fichier wrangler.toml temporaire pour le déploiement
+          cat > wrangler.toml << EOF
+          name = "vitrine-client-frontend"
+          compatibility_date = "2024-01-01"
+          compatibility_flags = ["nodejs_compat"]
+          
+          [site]
+          bucket = "./dist"
+          EOF
+          
+          # Déployer sur Cloudflare Pages
+          wrangler pages deploy dist --project-name=paloma-9sq --branch=main 
