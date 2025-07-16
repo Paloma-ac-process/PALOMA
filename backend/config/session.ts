@@ -26,7 +26,8 @@ const sessionConfig = defineConfig({
     path: '/',
     httpOnly: true,
     secure: app.inProduction,
-    sameSite: 'lax',
+    sameSite: 'none', // Changé de 'lax' à 'none' pour cross-domain
+    domain: undefined, // Permet les cookies cross-domain
   },
 
   /**
