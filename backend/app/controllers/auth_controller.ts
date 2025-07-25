@@ -153,24 +153,26 @@ export default class AuthController {
    * Obtenir les informations de l'utilisateur connecté (API)
    */
   async me({ auth, response }: HttpContext) {
-    try {
-      const user = auth.user!
-      return response.json({
-        success: true,
-        user: {
-          id: user.id,
-          email: user.email,
-          fullName: user.fullName,
-          role: user.role,
-          createdAt: user.createdAt
-        }
-      })
-    } catch (error) {
-      return response.status(401).json({
-        success: false,
-        message: 'Utilisateur non authentifié'
-      })
-    }
+    const user = auth.user!
+    console.log('🔍 User connected:', {
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      isVerified: user.isVerified
+    })
+    
+    return response.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        isVerified: user.isVerified,
+        createdAt: user.createdAt
+      }
+    })
   }
 
   /**

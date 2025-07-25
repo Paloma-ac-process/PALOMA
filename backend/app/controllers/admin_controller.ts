@@ -8,7 +8,16 @@ export default class AdminController {
   async listUsers({ auth, response }: HttpContext) {
     const user = auth.user!
     
+    console.log('🔍 Admin check - User:', {
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      isVerified: user.isVerified
+    })
+    
     if (user.role !== 'admin') {
+      console.log('❌ Access denied - User role:', user.role)
       return response.status(403).json({
         success: false,
         message: 'Accès interdit. Rôle admin requis.'
