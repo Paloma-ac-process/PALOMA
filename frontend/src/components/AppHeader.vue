@@ -17,7 +17,7 @@
             <router-link class="nav-link" to="/admin">Admin</router-link>
           </li>
           <li class="nav-item" v-if="isAdmin">
-            <router-link class="nav-link" to="/admin/users">Utilisateurs</router-link>
+            <a class="nav-link" href="https://paloma-9sq.pages.dev/admin/users" target="_blank">Utilisateurs</a>
           </li>
           <li class="nav-item" v-if="isAdmin">
             <router-link class="nav-link" to="/admin/clients">Clients</router-link>
