@@ -20,6 +20,32 @@ router.get('/', async () => {
   }
 })
 
+// Endpoint de debug pour vérifier la structure de la table users
+router.get('/debug/users', async ({ response }) => {
+  try {
+    const { default: User } = await import('#models/user')
+    const users = await User.query().select('*')
+    return response.json({ 
+      success: true, 
+      users: users.map(u => ({
+        id: u.id,
+        fullName: u.fullName,
+        email: u.email,
+        role: u.role,
+        isVerified: u.isVerified,
+        createdAt: u.createdAt
+      })),
+      total: users.length 
+    })
+  } catch (error) {
+    return response.json({ 
+      success: false, 
+      error: error.message,
+      stack: error.stack 
+    })
+  }
+})
+
 router.get('/health', async () => {
   try {
     // Test simple de la connexion à la base de données
