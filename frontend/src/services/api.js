@@ -17,6 +17,14 @@ export default {
     })
     return handleResponse(res)
   },
+  async updateUser(id, data) {
+    const res = await fetch(getApiUrl(`/api/users/${id}`), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+      body: JSON.stringify(data)
+    })
+    return handleResponse(res)
+  },
   async updateUserRole(id, role) {
     const res = await fetch(getApiUrl(`/api/users/${id}`), {
       method: 'PUT',
