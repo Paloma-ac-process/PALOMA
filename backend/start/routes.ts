@@ -53,5 +53,14 @@ router.group(() => {
   router.post('/resend-code', '#controllers/auth_controller.resendCode')
   router.post('/forgot-password', '#controllers/auth_controller.forgotPassword')
   router.post('/reset-password', '#controllers/auth_controller.resetPassword')
+  
+  // Routes d'administration des utilisateurs (admin seulement)
+  router.get('/users', '#controllers/admin_controller.listUsers').use(middleware.auth())
+  router.get('/users/:id', '#controllers/admin_controller.getUser').use(middleware.auth())
+  router.post('/users', '#controllers/admin_controller.createUser').use(middleware.auth())
+  router.put('/users/:id', '#controllers/admin_controller.updateUser').use(middleware.auth())
+  router.delete('/users/:id', '#controllers/admin_controller.deleteUser').use(middleware.auth())
+  router.get('/users/stats', '#controllers/admin_controller.getUserStats').use(middleware.auth())
+  
   // ... autres routes API si besoin
 }).prefix('/api')

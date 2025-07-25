@@ -10,8 +10,8 @@ const allApps = [
     name: 'Reporting',
     icon: 'ni ni-collection',
     iconBg: 'bg-primary',
-    desc: 'Outil de création pour l’expertise et la supervision.',
-    url: 'http://ac-process.com'
+    desc: 'Outil de création pour l\'expertise et la supervision.',
+    url: 'https://ac-process-reporting.pages.dev/login'
   },
   {
     name: 'Thermique',
