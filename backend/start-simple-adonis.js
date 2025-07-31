@@ -14,7 +14,7 @@ async function runMigrations() {
   return new Promise((resolve) => {
     console.log('📦 Running database migrations...')
     
-    const migrationProcess = spawn('node', ['build/ace', 'migration:run', '--force'], {
+    const migrationProcess = spawn('node', ['ace.js', 'migration:run', '--force'], {
       stdio: 'inherit',
       cwd: __dirname
     })
@@ -42,7 +42,7 @@ async function runMigrations() {
 function startServer() {
   console.log('🌐 Starting HTTP server...')
   
-  const serverProcess = spawn('node', ['build/ace', 'serve', '--watch=false'], {
+  const serverProcess = spawn('node', ['ace.js', 'serve', '--watch=false'], {
     stdio: 'inherit',
     cwd: __dirname,
     env: {
