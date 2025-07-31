@@ -9,44 +9,8 @@ const __dirname = dirname(__filename)
 
 console.log('🚀 Starting test HTTP server...')
 
-const server = createServer((req, res) => {
-  // Get the origin from the request
-  const origin = req.headers.origin
-  
-  // Set CORS headers - don't use wildcard when credentials are involved
-  if (origin) {
-    res.setHeader('Access-Control-Allow-Origin', origin)
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  res.setHeader('Access-Control-Allow-Credentials', 'true')
-  
-  if (req.method === 'OPTIONS') {
-    res.writeHead(200)
-    res.end()
-    return
-  }
-  
-  // Handle POST requests with body
-  if (req.method === 'POST') {
-    let body = ''
-    req.on('data', chunk => {
-      body += chunk.toString()
-    })
-    req.on('end', () => {
-      // Continue with the rest of the request handling
-      handleRequest(req, res, body)
-    })
-    return
-  }
-  
-  // Handle GET requests directly
-  handleRequest(req, res)
-})
-
 // Function to handle the actual request logic
 function handleRequest(req, res, body = null) {
-  
   // Handle different routes
   if (req.url === '/') {
     res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -101,6 +65,41 @@ function handleRequest(req, res, body = null) {
       method: req.method
     }))
   }
+}
+
+const server = createServer((req, res) => {
+  // Get the origin from the request
+  const origin = req.headers.origin
+  
+  // Set CORS headers - don't use wildcard when credentials are involved
+  if (origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin)
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200)
+    res.end()
+    return
+  }
+  
+  // Handle POST requests with body
+  if (req.method === 'POST') {
+    let body = ''
+    req.on('data', chunk => {
+      body += chunk.toString()
+    })
+    req.on('end', () => {
+      // Continue with the rest of the request handling
+      handleRequest(req, res, body)
+    })
+    return
+  }
+  
+  // Handle GET requests directly
+  handleRequest(req, res)
 })
 
 const port = process.env.PORT || 3333
