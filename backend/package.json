@@ -9,8 +9,8 @@
     "npm": ">=10.0.0"
   },
   "scripts": {
-    "start": "node ace migration:run --force || true && node ace serve --watch",
-    "build": "node ace build --ignore-ts-errors",
+    "start": "node build/ace migration:run --force || true && node build/ace serve",
+    "build": "node ace.js build --ignore-ts-errors",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
