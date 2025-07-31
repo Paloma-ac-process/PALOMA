@@ -20,5 +20,5 @@ RUN npm run build
 # Expose port
 EXPOSE 3333
 
-# Start command - use production server
-CMD ["npm", "start"] 
+# Start command - use test server temporarily while fixing AdonisJS
+CMD ["npm", "run", "start:test"] 
