@@ -2,6 +2,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Install ts-node globally
+RUN npm install -g ts-node
+
 # Copy package files
 COPY package*.json ./
 
@@ -12,7 +15,7 @@ RUN npm ci --production=false
 COPY . .
 
 # Make the production start scripts executable
-RUN chmod +x start-production.js start-server-only.js start-simple.js test-server.js
+RUN chmod +x start-production.js start-server-only.js start-simple.js start-simple-adonis.js test-server.js
 
 # Build the application
 RUN npm run build
@@ -20,5 +23,5 @@ RUN npm run build
 # Expose port
 EXPOSE 3333
 
-# Start command - use test server temporarily while fixing AdonisJS
-CMD ["npm", "run", "start:test"] 
+# Start command - use simple AdonisJS server
+CMD ["npm", "run", "start:simple-adonis"] 
