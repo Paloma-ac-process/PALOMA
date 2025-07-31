@@ -37,18 +37,18 @@ export default class AuthController {
         isVerified: false,
       })
 
-      // Envoyer le mail de vérification (HTML direct, sans template)
+      // Envoyer le mail de vérification
       try {
-      const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
+        const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
         await mail.send((message) => {
           message
             .to(email)
-            .from('noreplyactest@gmail.com')
             .subject('Votre code de vérification')
             .html(`<h2>Votre code de vérification</h2><p>Bonjour,</p><p>Voici votre code : <b>${verificationCode}</b></p>`)
         })
+        console.log('Email de vérification envoyé à:', email)
       } catch (mailError) {
-        console.log('Erreur envoi mail:', mailError.message)
+        console.error('Erreur envoi mail:', mailError.message)
         // On continue même si l'email ne peut pas être envoyé
       }
 
@@ -230,16 +230,24 @@ export default class AuthController {
     const verificationCode = String(Math.floor(100000 + Math.random() * 900000))
     user.verificationCode = verificationCode
     await user.save()
-    // Envoyer le mail de vérification (HTML direct, sans template)
-    const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
-    await mail.send((message) => {
-      message
-        .to(email)
-        .from('noreplyactest@gmail.com')
-        .subject('Votre code de vérification')
-        .html(`<h2>Votre code de vérification</h2><p>Bonjour,</p><p>Voici votre code : <b>${verificationCode}</b></p>`)
-    })
-    return response.json({ success: true, message: 'Nouveau code envoyé par email' })
+    // Envoyer le mail de vérification
+    try {
+      const mail = await import('@adonisjs/mail/services/main').then(m => m.default)
+      await mail.send((message) => {
+        message
+          .to(email)
+          .subject('Votre code de vérification')
+          .html(`<h2>Votre code de vérification</h2><p>Bonjour,</p><p>Voici votre code : <b>${verificationCode}</b></p>`)
+      })
+      console.log('Email de vérification renvoyé à:', email)
+      return response.json({ success: true, message: 'Nouveau code envoyé par email' })
+    } catch (mailError) {
+      console.error('Erreur envoi mail resendCode:', mailError.message)
+      return response.status(500).json({ 
+        success: false, 
+        message: 'Erreur lors de l\'envoi du code de vérification' 
+      })
+    }
   }
 
   /**
