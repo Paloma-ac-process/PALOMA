@@ -5,23 +5,20 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install ALL dependencies (including dev dependencies for build)
-RUN npm ci
+# Install ALL dependencies (including dev dependencies)
+RUN npm ci --production=false
 
 # Copy source code
 COPY . .
 
 # Make the production start scripts executable
-RUN chmod +x start-production.js start-server-only.js
+RUN chmod +x start-production.js start-server-only.js start-simple.js test-server.js
 
 # Build the application
 RUN npm run build
 
-# Keep all dependencies (including dev dependencies needed for runtime)
-# RUN npm prune --production
-
 # Expose port
 EXPOSE 3333
 
-# Start command
-CMD ["npm", "start"] 
+# Start command - use test server for now to debug
+CMD ["npm", "run", "start:test"] 
