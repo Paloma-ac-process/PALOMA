@@ -39,6 +39,12 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
   })
   .httpServer()
   .start()
+  .then(() => {
+    const port = process.env.PORT || 3333
+    console.log(`🚀 Server started on port ${port}`)
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`)
+    console.log(`🔗 Health check available at: http://localhost:${port}/health`)
+  })
   .catch((error) => {
     process.exitCode = 1
     prettyPrintError(error)

@@ -4,6 +4,10 @@
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.6.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "start": "node ace migration:run --force || true && node ace serve --watch",
     "build": "node ace build --ignore-ts-errors",
