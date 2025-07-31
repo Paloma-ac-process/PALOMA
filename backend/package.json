@@ -13,7 +13,7 @@
     "start:server-only": "node start-server-only.js",
     "start:simple": "node start-simple.js",
     "start:test": "node test-server.js",
-    "build": "node ace.js build --ignore-ts-errors --production",
+    "build": "node ace.js build --ignore-ts-errors",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",

@@ -11,11 +11,8 @@ RUN npm ci --production=false
 # Copy source code
 COPY . .
 
-# Make the production start scripts executable
-RUN chmod +x start-production.js start-server-only.js start-simple.js test-server.js
-
-# Build the application
-RUN npm run build
+# Make the test server executable
+RUN chmod +x test-server.js
 
 # Expose port
 EXPOSE 3333
