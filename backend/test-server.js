@@ -35,13 +35,40 @@ function handleRequest(req, res, body = null) {
       cors: 'enabled'
     }))
   } else if (req.url === '/api/login' && req.method === 'POST') {
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({
-      success: true,
-      message: 'Login endpoint (test mode)',
-      timestamp: new Date().toISOString(),
-      body: body ? JSON.parse(body) : null
-    }))
+    try {
+      const loginData = body ? JSON.parse(body) : {}
+      console.log('Login attempt:', loginData)
+      
+      // Simuler une validation basique
+      if (!loginData.email || !loginData.password) {
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({
+          success: false,
+          message: 'Email et mot de passe requis'
+        }))
+        return
+      }
+      
+      // Simuler un login réussi
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({
+        success: true,
+        message: 'Connexion réussie (mode test)',
+        user: {
+          id: 1,
+          email: loginData.email,
+          fullName: 'Utilisateur Test',
+          role: 'user',
+          isVerified: true
+        }
+      }))
+    } catch (error) {
+      res.writeHead(400, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({
+        success: false,
+        message: 'Données invalides'
+      }))
+    }
   } else if (req.url === '/api/register' && req.method === 'POST') {
     res.writeHead(200, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({
@@ -54,8 +81,13 @@ function handleRequest(req, res, body = null) {
     res.writeHead(200, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({
       success: true,
-      message: 'Me endpoint (test mode)',
-      timestamp: new Date().toISOString()
+      user: {
+        id: 1,
+        email: 'test@example.com',
+        fullName: 'Utilisateur Test',
+        role: 'user',
+        isVerified: true
+      }
     }))
   } else {
     res.writeHead(404, { 'Content-Type': 'application/json' })
