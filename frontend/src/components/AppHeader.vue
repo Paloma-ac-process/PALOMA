@@ -1,64 +1,74 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
-    <div class="container-fluid">
-      <router-link class="navbar-brand fw-bold" to="/paloma-apps">
-        <img src="@/assets/paloma-logo.png" alt="Logo" height="32" class="me-2" />
-        PALOMA
-      </router-link>
-      <div :class="['navbar-collapse', menuOpen ? 'show' : 'collapse']" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0" @click.stop>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/paloma-apps">Applications</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/paloma/dashboard">Dashboard</router-link>
-          </li>
-          <li class="nav-item" v-if="isAdmin">
-            <router-link class="nav-link" to="/admin">Admin</router-link>
-          </li>
-          <li class="nav-item" v-if="isAdmin">
-            <a class="nav-link" href="https://paloma-9sq.pages.dev/admin/users" target="_blank">Utilisateurs</a>
-          </li>
-          <li class="nav-item" v-if="isAdmin">
-            <router-link class="nav-link" to="/admin/clients">Clients</router-link>
-          </li>
-          <li class="nav-item" v-if="isAdmin">
-            <router-link class="nav-link" to="/admin/plans">Plans</router-link>
-          </li>
-          <li class="nav-item" v-if="isAdmin">
-            <router-link class="nav-link" to="/admin/exports">Exports</router-link>
-          </li>
-        </ul>
-        <span class="navbar-text me-3">
-          Bonjour, <b>{{ userName }}</b>
-        </span>
-        <button class="btn btn-outline-danger btn-sm me-2" @click="logout">Déconnexion</button>
+  <header class="bg-white shadow-sm border-b">
+    <div class="px-6 py-4">
+      <div class="flex justify-between items-center">
+        <!-- Breadcrumb -->
+        <div class="flex items-center space-x-2 text-sm text-gray-600">
+          <span>🏠</span>
+          <span>/</span>
+          <span class="text-gray-900 font-medium">{{ pageTitle }}</span>
+        </div>
+
+        <!-- User Menu -->
+        <div class="flex items-center space-x-4">
+          <!-- Notifications -->
+          <button class="relative p-2 text-gray-400 hover:text-gray-600">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4.19 4.19A2 2 0 004 6v10a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-1.81 1.19z"></path>
+            </svg>
+            <span v-if="notifications.length > 0" class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+              {{ notifications.length }}
+            </span>
+          </button>
+
+          <!-- User Profile -->
+          <div class="flex items-center space-x-3">
+            <div class="text-right">
+              <div class="text-sm font-medium text-gray-900">{{ user?.fullName || user?.email }}</div>
+              <div class="text-xs text-gray-500">{{ user?.role }}</div>
+            </div>
+            <button @click="showUserMenu = !showUserMenu" class="relative">
+              <div class="h-8 w-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                {{ user?.fullName?.charAt(0) || user?.email?.charAt(0) }}
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
-      <!-- Bouton burger tout à droite -->
-      <button class="navbar-toggler d-block ms-auto" type="button" @click="menuOpen = !menuOpen" :aria-expanded="menuOpen" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
     </div>
-  </nav>
+  </header>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-const authStore = useAuthStore()
-const router = useRouter()
+const route = useRoute()
+const user = ref(null)
+const showUserMenu = ref(false)
+const notifications = ref([])
 
-const isAdmin = computed(() => authStore.getUser?.role === 'admin')
-const userName = computed(() => authStore.getUser?.fullName || authStore.getUser?.email || 'Utilisateur')
+// Titre de la page basé sur la route
+const pageTitle = computed(() => {
+  switch (route.path) {
+    case '/paloma/dashboard':
+      return 'Dashboard'
+    case '/paloma/plans':
+      return 'Plans'
+    case '/paloma/exports':
+      return 'Exports'
+    default:
+      return 'Paloma'
+  }
+})
 
-const menuOpen = ref(false)
-
-const logout = async () => {
-  await authStore.logout()
-  router.push('/login')
-}
+onMounted(() => {
+  // Charger les données utilisateur
+  const userData = localStorage.getItem('paloma_user')
+  if (userData) {
+    user.value = JSON.parse(userData)
+  }
+})
 </script>
 
 <style scoped>
