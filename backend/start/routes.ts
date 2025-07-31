@@ -16,7 +16,29 @@ router.get('/', async () => {
   return {
     hello: 'world',
     message: 'Vitrine Client Backend API',
-    version: '1.0.0'
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  }
+})
+
+// Test endpoint pour vérifier que l'API fonctionne
+router.get('/test', async () => {
+  return {
+    status: 'ok',
+    message: 'API is working',
+    timestamp: new Date().toISOString(),
+    cors: 'enabled',
+    environment: process.env.NODE_ENV || 'development'
+  }
+})
+
+// Simple health check without database
+router.get('/ping', async () => {
+  return {
+    status: 'ok',
+    message: 'pong',
+    timestamp: new Date().toISOString()
   }
 })
 
